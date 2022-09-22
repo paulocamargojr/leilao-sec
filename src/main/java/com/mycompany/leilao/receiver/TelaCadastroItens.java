@@ -1,12 +1,17 @@
 package com.mycompany.leilao.receiver;
 
+import com.mycompany.leilao.compartilhado.Item;
+import java.awt.List;
+import java.util.ArrayList;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 
 public class TelaCadastroItens extends javax.swing.JFrame {
-    
+    ArrayList<Item> itens;
     public TelaCadastroItens() {
         initComponents();
         jPanelCadastroItens.setVisible(false);
+        itens = new ArrayList<>();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -146,14 +151,30 @@ public class TelaCadastroItens extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-
-        String[] teste1 = {"teste"};
-        JList teste = new JList(teste1);
-        jListItens.add(teste);
+        jPanelCadastroItens.setVisible(true);
+        
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
-        // TODO add your handling code here:
+        
+        String testeNome = jTextFieldNome.getText();
+        double preco = Double.parseDouble(jTextFieldPreco.getText());
+        double valorMin = Double.parseDouble(jTextFieldLanceMin.getText());
+        
+        Item item = new Item(testeNome, preco, valorMin);
+        
+        
+        itens.add(item);
+        
+        jListItens.setFont(new java.awt.Font("Tahoma", 0, 24));
+        DefaultListModel demoList = new DefaultListModel();
+        for (Item i : itens) {
+            demoList.addElement(i.getNome());
+        }
+        
+        JList teste = new JList(demoList);
+        jListItens.setModel(demoList);
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
