@@ -164,9 +164,8 @@ public class TelaCadastroItens extends javax.swing.JFrame {
         
         Item item = new Item(testeNome, preco, valorMin);
         
-        
         itens.add(item);
-        
+        //teste teste daniel
         jListItens.setFont(new java.awt.Font("Tahoma", 0, 24));
         DefaultListModel demoList = new DefaultListModel();
         for (Item i : itens) {
