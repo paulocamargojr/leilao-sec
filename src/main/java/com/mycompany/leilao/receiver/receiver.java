@@ -11,6 +11,11 @@ public class receiver {
     public static void main(String[] args) {
         TelaCadastroItens tela = new TelaCadastroItens();
         tela.show();
+        
+        
+        
+        
+        
     }
     
     public void iniciarComunicacao() {

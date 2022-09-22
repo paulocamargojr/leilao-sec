@@ -1,5 +1,7 @@
 package com.mycompany.leilao.receiver;
 
+import javax.swing.JList;
+
 public class TelaCadastroItens extends javax.swing.JFrame {
     
     public TelaCadastroItens() {
@@ -144,7 +146,10 @@ public class TelaCadastroItens extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        jPanelCadastroItens.setVisible(true);
+
+        String[] teste1 = {"teste"};
+        JList teste = new JList(teste1);
+        jListItens.add(teste);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
