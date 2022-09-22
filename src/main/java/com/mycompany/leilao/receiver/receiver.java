@@ -10,12 +10,7 @@ import org.json.JSONObject;
 public class receiver {
     public static void main(String[] args) {
         TelaCadastroItens tela = new TelaCadastroItens();
-        tela.show();
-        
-        
-        
-        
-        
+        tela.show(); 
     }
     
     public void iniciarComunicacao() {
