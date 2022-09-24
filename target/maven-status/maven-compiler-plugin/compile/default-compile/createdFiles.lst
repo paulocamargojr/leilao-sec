@@ -1,3 +1,7 @@
-com\mycompany\leilao\seguranca\LeilaoSeguranca.class
+com\mycompany\leilao\receiver\TelaCadastroItens.class
+com\mycompany\leilao\compartilhado\Item.class
+com\mycompany\leilao\receiver\TelaCadastroItens$2.class
+com\mycompany\leilao\compartilhado\ControladorItem.class
 com\mycompany\leilao\sender\sender.class
 com\mycompany\leilao\receiver\receiver.class
+com\mycompany\leilao\receiver\TelaCadastroItens$1.class
