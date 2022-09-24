@@ -14,7 +14,10 @@ public class Item {
         id = gerarId();
         this.nome = nome;
         this.valor = valor;
-        this.lanceMin = lanceMin;
+        this.lanceMin = lanceMin; 
+    }
+    
+    public Item(){
         
     }
     
@@ -26,6 +29,10 @@ public class Item {
         return this.nome;
     }
     
+    public String getId(){
+        return this.id;
+    }
+    
     public double getValor() {
         return this.valor;
     }
@@ -33,9 +40,9 @@ public class Item {
     public double getLanceMin() {
         return this.lanceMin;
     }
-    
+
     @Override
     public String toString() {
-        return "";
+        return "id=" + id + ", nome=" + nome + ", valor=" + valor + ", lanceMin=" + lanceMin;
     }
 }
