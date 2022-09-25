@@ -41,6 +41,18 @@ public class Item {
         return this.lanceMin;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public void setLanceMin(double lanceMin) {
+        this.lanceMin = lanceMin;
+    }
+
     @Override
     public String toString() {
         return "id=" + id + ", nome=" + nome + ", valor=" + valor + ", lanceMin=" + lanceMin;

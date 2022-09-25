@@ -1,4 +1,4 @@
-package com.mycompany.leilao.client;
+package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Item;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class Comunicacao extends Thread {
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
 
                 String nome = jsonRcvMsg.getString("Nome");
-                double preco = jsonRcvMsg.getDouble("Preco");
+                double preco = jsonRcvMsg.getDouble("Valor");
                 double lanceMin = jsonRcvMsg.getDouble("LanceMin");
 
                 Item item = new Item(nome, preco, lanceMin);

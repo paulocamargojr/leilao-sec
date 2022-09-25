@@ -1,4 +1,4 @@
-package com.mycompany.leilao.client;
+package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Item;
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonTestarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTestarActionPerformed
-        
+        PopularLista();
     }//GEN-LAST:event_jButtonTestarActionPerformed
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -68,7 +68,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void PopularLista() {
-       ArrayList<Item> itens = c.SelecionarTodos();
+        ArrayList<Item> itens = c.SelecionarTodos();
        
         jListItens.setFont(new java.awt.Font("Arial", 0, 16));
         DefaultListModel demoList = new DefaultListModel();
