@@ -37,7 +37,6 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jButtonVoltar = new javax.swing.JButton();
         jButtonNovoItem = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButtonIniciarComunicao = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualização e cadastro de itens");
@@ -148,13 +147,6 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         jLabel1.setText("Visualização e cadastro de itens");
 
-        jButtonIniciarComunicao.setText("Iniciar leilao");
-        jButtonIniciarComunicao.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonIniciarComunicaoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -164,8 +156,6 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonIniciarComunicao, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(218, 218, 218)
                         .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
@@ -179,9 +169,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addGap(35, 35, 35)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonIniciarComunicao, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -228,10 +216,6 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jPanelCriar.setVisible(false);
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
-    private void jButtonIniciarComunicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIniciarComunicaoActionPerformed
-        c.start();
-    }//GEN-LAST:event_jButtonIniciarComunicaoActionPerformed
-
      private void AtualizarLista() {
         ArrayList<Item> itens = new ArrayList<>();
         itens = controlador.SelecionarTodos();
@@ -244,7 +228,6 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonIniciarComunicao;
     private javax.swing.JButton jButtonNovoItem;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JButton jButtonVoltar;
