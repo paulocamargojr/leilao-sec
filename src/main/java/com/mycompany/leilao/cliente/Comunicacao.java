@@ -32,16 +32,39 @@ public class Comunicacao extends Thread {
                 rcvData = rcvDatagramPacket.getData();
                 String rcvMsg = new String(rcvData, "UTF-8");
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
+                
+                if(jsonRcvMsg.has("AtualizacaoItem")){
+                    
+                    //ArrayList<Item> itens = SelecionarTodos();
+                    
+                    String nome = jsonRcvMsg.getString("Nome");
+                    double preco = jsonRcvMsg.getDouble("Valor");
+                    double lanceMin = jsonRcvMsg.getDouble("LanceMin");
+                    String ultimoLance = jsonRcvMsg.getString("UltimoLance");
+                    double valorUltimoLance = jsonRcvMsg.getDouble("ValorUltimoLance");
+                    String tempoRestante = jsonRcvMsg.getString("Tempo");
+                    String estaAtivo = jsonRcvMsg.getString("Leilao");
 
-                String nome = jsonRcvMsg.getString("Nome");
-                double preco = jsonRcvMsg.getDouble("Valor");
-                double lanceMin = jsonRcvMsg.getDouble("LanceMin");
+                    for (Item item : itens) {
+                        if (item.getNome() == nome) {
+                            item.setNomeUltimoLance(ultimoLance);
+                            item.setValorUltimoLance(valorUltimoLance);
+                            item.setTempo(tempoRestante);
+                            item.setLeilaoAtivo(estaAtivo);
+                            itens.add(item);
+                        }
+                    }
+                }else{
+                    String nome = jsonRcvMsg.getString("Nome");
+                    double preco = jsonRcvMsg.getDouble("Valor");
+                    double lanceMin = jsonRcvMsg.getDouble("LanceMin");
+                    String estaAtivo = jsonRcvMsg.getString("Leilao");
 
-                Item item = new Item(nome, preco, lanceMin);
+                    Item item = new Item(nome, preco, lanceMin);
+                    item.setLeilaoAtivo(estaAtivo);
 
-                itens.add(item);
-
-                JOptionPane.showMessageDialog(null, rcvMsg, "Mensagem recebida pelo servidor!", JOptionPane.INFORMATION_MESSAGE);
+                    itens.add(item);
+                }
             } 
     
         } catch (IOException ex) {
