@@ -75,4 +75,10 @@ public class Comunicacao extends Thread {
     public ArrayList<Item> SelecionarTodos(){
         return itens;
     }
+    
+    Thread t = new Thread(){
+        public static void main(String[] args) {
+            System.out.println("teste");
+        }
+    };
 }
