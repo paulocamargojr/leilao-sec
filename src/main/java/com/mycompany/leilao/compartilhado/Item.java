@@ -8,7 +8,10 @@ public class Item {
     private String nome;
     private double valor;
     private double lanceMin;
-    private Timestamp tempo;
+    private String tempo;
+    private String nomeUltimoLance;
+    private double valorUltimoLance;
+    private String leilaoAtivo;
     
     public Item(String nome, double valor, double lanceMin) {
         id = gerarId();
@@ -41,6 +44,50 @@ public class Item {
         return this.lanceMin;
     }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
+    public void setLanceMin(double lanceMin) {
+        this.lanceMin = lanceMin;
+    }
+
+    public String getNomeUltimoLance() {
+        return nomeUltimoLance;
+    }
+
+    public void setNomeUltimoLance(String nomeUltimoLance) {
+        this.nomeUltimoLance = nomeUltimoLance;
+    }
+
+    public double getValorUltimoLance() {
+        return valorUltimoLance;
+    }
+
+    public void setValorUltimoLance(double valorUltimoLance) {
+        this.valorUltimoLance = valorUltimoLance;
+    }
+
+    public String getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(String tempo) {
+        this.tempo = tempo;
+    }
+
+    public void setLeilaoAtivo(String leilaoAtivo) {
+        this.leilaoAtivo = leilaoAtivo;
+    }
+    
+    public String getLeilaoAtivo(){
+        return this.leilaoAtivo;
+    }
+    
     @Override
     public String toString() {
         return "id=" + id + ", nome=" + nome + ", valor=" + valor + ", lanceMin=" + lanceMin;

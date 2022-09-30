@@ -2,15 +2,22 @@ package com.mycompany.leilao.servidor;
 
 import com.mycompany.leilao.compartilhado.ControladorItem;
 import com.mycompany.leilao.compartilhado.Item;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
-public class TelaGerenciamentoItens extends javax.swing.JFrame {
+public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnable{
     ControladorItem controlador = new ControladorItem();
+    Comunicacao c = new Comunicacao(controlador);
+    Item itemSelecionado;
     public TelaGerenciamentoItens() {
         this.setLocationRelativeTo(null);
         initComponents();
         jPanelCriar.setVisible(false);
+        c.start();
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -30,8 +37,9 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jButtonSalvar = new javax.swing.JButton();
         jButtonVoltar = new javax.swing.JButton();
-        jButtonNovoItem = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        jButtonNovoItem = new javax.swing.JButton();
+        jButtonNovoItem1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualização e cadastro de itens");
@@ -44,17 +52,13 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jPanelLista.setLayout(jPanelListaLayout);
         jPanelListaLayout.setHorizontalGroup(
             jPanelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelListaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 747, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 759, Short.MAX_VALUE)
         );
         jPanelListaLayout.setVerticalGroup(
             jPanelListaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelListaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel1.add(jPanelLista, "card2");
@@ -123,7 +127,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTextFieldLanceMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 136, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 128, Short.MAX_VALUE)
                 .addGroup(jPanelCriarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonVoltar, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -132,6 +136,9 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
 
         jPanel1.add(jPanelCriar, "card3");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
+        jLabel1.setText("Visualização e cadastro de itens");
+
         jButtonNovoItem.setText("Novo item");
         jButtonNovoItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -139,8 +146,12 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
-        jLabel1.setText("Visualização e cadastro de itens");
+        jButtonNovoItem1.setText("Iniciar leilão de item");
+        jButtonNovoItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNovoItem1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -149,13 +160,14 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButtonNovoItem1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -163,10 +175,15 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
-                .addGap(35, 35, 35)
-                .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(43, 43, 43)
+                        .addComponent(jButtonNovoItem1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -185,10 +202,17 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         double valorMin = Double.parseDouble(jTextFieldLanceMin.getText());
         
         Item item = new Item(nome, preco, valorMin);
+        item.setLeilaoAtivo("");
         
         controlador.AdicionarItem(item);
         
         AtualizarLista();
+        
+        try {
+            c.Enviar(item);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         jTextFieldNome.setText("");
         jTextFieldValor.setText("");
@@ -205,6 +229,36 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
         jPanelCriar.setVisible(false);
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
+    private void jButtonNovoItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoItem1ActionPerformed
+        ArrayList<Item> itens = controlador.SelecionarTodos();
+        
+        if (jListItens.size() == null) {
+            JOptionPane.showMessageDialog(null, "Insira um item primeiro!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        } else {
+            String itemLista = jListItens.getSelectedValue();
+
+            if (itemLista == null) {
+                JOptionPane.showMessageDialog(null, "Selecione um item primeiro!", "Erro!", JOptionPane.ERROR_MESSAGE);
+                return;
+            } else {
+                for (Item item : itens) {
+                    if (itemLista.contains(item.getId())) {
+                        itemSelecionado = item;
+                        break;
+                    }
+                }
+            }
+        }
+        itemSelecionado.setLeilaoAtivo("sim");
+        try {
+            c.EnviarAtualizacoes(itemSelecionado);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButtonNovoItem1ActionPerformed
+
      private void AtualizarLista() {
         ArrayList<Item> itens = new ArrayList<>();
         itens = controlador.SelecionarTodos();
@@ -218,6 +272,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonNovoItem;
+    private javax.swing.JButton jButtonNovoItem1;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JLabel jLabel1;
@@ -234,4 +289,19 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldNome;
     private javax.swing.JTextField jTextFieldValor;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(1500);
+                c.EnviarAtualizacoes(itemSelecionado);
+
+            } catch (IOException ex) {
+                Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }
