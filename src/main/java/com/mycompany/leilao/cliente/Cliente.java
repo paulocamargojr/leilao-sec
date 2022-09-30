@@ -5,5 +5,8 @@ public class Cliente {
         TelaInicialLeilao tela = new TelaInicialLeilao();
         tela.show();
         tela.run();
+//        TelaLogin tela = new TelaLogin();
+//        tela.setLocationRelativeTo(null);
+//        tela.show();
     }
 }
