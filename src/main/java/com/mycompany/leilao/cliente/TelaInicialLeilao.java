@@ -2,6 +2,7 @@ package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Usuario;
 import com.mycompany.leilao.compartilhado.Item;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,6 +18,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
     Comunicacao comunicacao;
     Item itemSelecionado;
+    Usuario usuario;
 
     public TelaInicialLeilao() {
         initComponents();
@@ -178,6 +180,12 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         double valorLance = Double.parseDouble(JOptionPane.showInputDialog(null, "Informe o valor do lance:", "Dar lance", JOptionPane.QUESTION_MESSAGE));
+        
+        try {
+            comunicacao.EnviarLance(usuario, valorLance);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaInicialLeilao.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -250,7 +258,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     private void EntrarNoGrupo() {
         String userName = JOptionPane.showInputDialog(null, "Insira seu Nome: ");
 
-        Usuario usuario = new Usuario(userName);
+        usuario = new Usuario(userName);
 
         try {
             DatagramSocket clientSock = new DatagramSocket();

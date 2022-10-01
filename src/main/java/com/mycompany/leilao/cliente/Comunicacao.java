@@ -1,6 +1,7 @@
 package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Item;
+import com.mycompany.leilao.compartilhado.Usuario;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -27,12 +28,12 @@ public class Comunicacao extends Thread {
             
             multicastSocket.joinGroup(group);
             byte[] rcvData = new byte[65507];
-            byte[] sendData = new byte[65507];
-            JSONObject jsonObject = new JSONObject();
-            jsonObject.put("Id", 1);
-            sendData = jsonObject.toString().getBytes("UTF-8");
-            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50000);
-            multicastSocket.send(sendDatagramPacket);
+//            byte[] sendData = new byte[65507];
+//            JSONObject jsonObject = new JSONObject();
+//            jsonObject.put("Id", 1);
+//            sendData = jsonObject.toString().getBytes("UTF-8");
+//            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50000);
+//            multicastSocket.send(sendDatagramPacket);
 
             while (true) {
                 DatagramPacket rcvDatagramPacket = new DatagramPacket(rcvData, rcvData.length);
@@ -56,7 +57,7 @@ public class Comunicacao extends Thread {
                             item.setLeilaoAtivo(estaAtivo);
                         }
                     }
-                } else {
+                } else if (!jsonRcvMsg.has("Usuario")){
                     String nome = jsonRcvMsg.getString("Nome");
                     double preco = jsonRcvMsg.getDouble("Valor");
                     double lanceMin = jsonRcvMsg.getDouble("LanceMin");
@@ -77,5 +78,15 @@ public class Comunicacao extends Thread {
 
     public ArrayList<Item> SelecionarTodos() {
         return itens;
+    }
+    
+    public void EnviarLance(Usuario usuario, double valor) throws IOException{
+        byte[] sendData = new byte[65507];
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("Usuario", usuario.getNome());
+        jsonObject.put("ValorLance", valor);
+        sendData = jsonObject.toString().getBytes("UTF-8");
+        DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);
+        multicastSocket.send(sendDatagramPacket);
     }
 }
