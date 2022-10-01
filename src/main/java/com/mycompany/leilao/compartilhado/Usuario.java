@@ -1,4 +1,4 @@
-package com.mycompany.leilao.cliente;
+package com.mycompany.leilao.compartilhado;
 
 import java.security.PrivateKey;
 import java.security.PublicKey;

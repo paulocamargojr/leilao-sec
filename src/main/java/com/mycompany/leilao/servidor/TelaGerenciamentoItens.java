@@ -297,7 +297,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
     public void run() {
         while (true) {
             try {
-                Thread.sleep(1500);
+                Thread.sleep(1000);
                 c.EnviarAtualizacoes(itemSelecionado);
 
             } catch (IOException ex) {

@@ -2,11 +2,10 @@ C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\myc
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\cliente\Cliente.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\cliente\Usuario.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\cliente\Comunicacao.java
-C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\cliente\TelaLogin.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\compartilhado\Criptografia.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\cliente\TelaInicialLeilao.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\servidor\Servidor.java
-C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\servidor\ControladorAcesso.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\servidor\TelaGerenciamentoItens.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\compartilhado\Item.java
 C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\servidor\Comunicacao.java
+C:\Users\paulo\Documents\NetBeansProjects\leilao-seguranca\src\main\java\com\mycompany\leilao\servidor\ControleEntrada.java
