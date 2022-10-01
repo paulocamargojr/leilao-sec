@@ -1,5 +1,6 @@
 package com.mycompany.leilao.cliente;
 
+import com.mycompany.leilao.compartilhado.Usuario;
 import com.mycompany.leilao.compartilhado.Item;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -19,7 +20,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
     public TelaInicialLeilao() {
         initComponents();
-        SolicitarEntrada();
+        EntrarNoGrupo();
     }
 
     @SuppressWarnings("unchecked")
@@ -219,7 +220,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
                 AtualizarDadosLeilao();
             }
             try {
-                Thread.sleep(1500);
+                Thread.sleep(1000);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TelaInicialLeilao.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -246,7 +247,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    private void SolicitarEntrada() {
+    private void EntrarNoGrupo() {
         String userName = JOptionPane.showInputDialog(null, "Insira seu Nome: ");
 
         Usuario usuario = new Usuario(userName);

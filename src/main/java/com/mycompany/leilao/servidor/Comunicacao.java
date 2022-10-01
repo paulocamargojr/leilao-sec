@@ -2,11 +2,13 @@ package com.mycompany.leilao.servidor;
 
 import com.mycompany.leilao.compartilhado.ControladorItem;
 import com.mycompany.leilao.compartilhado.Item;
+import com.mycompany.leilao.compartilhado.Usuario;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
@@ -36,7 +38,6 @@ public class Comunicacao extends Thread{
                 DatagramPacket datagramPacket = new DatagramPacket(rcvData, rcvData.length);
                 System.out.println("Aguardando mensagens...");
                 multicastSocket.receive(datagramPacket);
-                inetAddressIP = datagramPacket.getAddress();
                 inetAddressPort = datagramPacket.getPort();
                 rcvData = datagramPacket.getData(); 
             }
@@ -70,7 +71,7 @@ public class Comunicacao extends Thread{
             multicastSocket.joinGroup(group);
             byte[] sendData = new byte[65507];
             JSONObject sendItem = new JSONObject();
-
+            
             sendItem.put("AtualizacaoItem", true);
             sendItem.put("Nome", item.getNome());
             sendItem.put("Valor", item.getValor());
