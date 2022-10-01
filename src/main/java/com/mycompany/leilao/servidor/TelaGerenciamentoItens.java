@@ -254,12 +254,12 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
             }
         }
         itemSelecionado.setLeilaoAtivo("sim");
-        try {
-            c.EnviarAtualizacoes(itemSelecionado);
-        } catch (IOException ex) {
-            Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+//        try {
+//            c.EnviarAtualizacoes(itemSelecionado);
+//        } catch (IOException ex) {
+//            Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
     }//GEN-LAST:event_jButtonLeiloarItemActionPerformed
 
      private void AtualizarLista() {

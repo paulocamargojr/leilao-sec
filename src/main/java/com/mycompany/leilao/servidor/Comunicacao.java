@@ -20,6 +20,8 @@ public class Comunicacao extends Thread{
     int inetAddressPort;
     MulticastSocket multicastSocket;
     InetAddress group;
+    String nomeUltimoLance = "";
+    double valorUltimoLance = 0;
     
     public Comunicacao(ControladorItem controladorItem) {
         this.controladorItem = controladorItem;
@@ -29,17 +31,23 @@ public class Comunicacao extends Thread{
     @Override
     public void run() {
         try {
-            multicastSocket = new MulticastSocket(50000);
+            multicastSocket = new MulticastSocket(50002);
             group = InetAddress.getByName("230.0.0.0");
             multicastSocket.joinGroup(group);
-            JOptionPane.showMessageDialog(null, "Iniciando servidor...", "Iniciando", JOptionPane.INFORMATION_MESSAGE);
             byte[] rcvData = new byte[65507];
             while(true){
-                DatagramPacket datagramPacket = new DatagramPacket(rcvData, rcvData.length);
-                System.out.println("Aguardando mensagens...");
-                multicastSocket.receive(datagramPacket);
-                inetAddressPort = datagramPacket.getPort();
-                rcvData = datagramPacket.getData(); 
+                DatagramPacket rcvDatagramPacket = new DatagramPacket(rcvData, rcvData.length);
+                multicastSocket.receive(rcvDatagramPacket);
+                inetAddressPort = rcvDatagramPacket.getPort();
+                rcvData = rcvDatagramPacket.getData();
+                
+                String rcvMsg = new String(rcvData, "UTF-8");
+                JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
+                
+                if(jsonRcvMsg.has("Usuario")){
+                    nomeUltimoLance = jsonRcvMsg.getString("Usuario");
+                    valorUltimoLance = jsonRcvMsg.getDouble("ValorLance");
+                }
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
@@ -60,7 +68,7 @@ public class Comunicacao extends Thread{
         sendItem.put("Leilao", item.getLeilaoAtivo());
 
         sendData = sendItem.toString().getBytes();
-        DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, inetAddressPort);
+        DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);
         multicastSocket.send(sendDatagramPacket);
     }
     
@@ -76,13 +84,13 @@ public class Comunicacao extends Thread{
             sendItem.put("Nome", item.getNome());
             sendItem.put("Valor", item.getValor());
             sendItem.put("LanceMin", item.getLanceMin());
-            sendItem.put("UltimoLance", "Ninguém");
-            sendItem.put("ValorUltimoLance", 0);
+            sendItem.put("UltimoLance", nomeUltimoLance);
+            sendItem.put("ValorUltimoLance", valorUltimoLance);
             sendItem.put("Tempo", "00:23:21s");
             sendItem.put("Leilao", item.getLeilaoAtivo());
 
             sendData = sendItem.toString().getBytes();
-            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, inetAddressPort);
+            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);
             multicastSocket.send(sendDatagramPacket);
         }
     }   
