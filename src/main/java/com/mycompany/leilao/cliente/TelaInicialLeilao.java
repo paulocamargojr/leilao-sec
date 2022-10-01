@@ -1,21 +1,27 @@
 package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Item;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import org.json.JSONObject;
 
 public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
-    Comunicacao c = new Comunicacao();
+
+    Comunicacao comunicacao;
     Item itemSelecionado;
-    
+
     public TelaInicialLeilao() {
         initComponents();
-        c.start();
-        AtualizarLista();
+        SolicitarEntrada();
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -171,9 +177,9 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         double valorLance = Double.parseDouble(JOptionPane.showInputDialog(null, "Informe o valor do lance:", "Dar lance", JOptionPane.QUESTION_MESSAGE));
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -195,8 +201,8 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     // End of variables declaration//GEN-END:variables
 
     public void AtualizarLista() {
-        ArrayList<Item> itens = c.SelecionarTodos();
-       
+        ArrayList<Item> itens = comunicacao.SelecionarTodos();
+
         jListItens.setFont(new java.awt.Font("Arial", 0, 16));
         DefaultListModel demoList = new DefaultListModel();
         for (Item i : itens) {
@@ -207,9 +213,11 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
     @Override
     public void run() {
-        while(true){
-            AtualizarLista();
-            AtualizarDadosLeilao();
+        while (true) {
+            if (comunicacao != null) {
+                AtualizarLista();
+                AtualizarDadosLeilao();
+            }
             try {
                 Thread.sleep(1500);
             } catch (InterruptedException ex) {
@@ -219,22 +227,63 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     }
 
     private void AtualizarDadosLeilao() {
-        ArrayList<Item> itens = c.SelecionarTodos();
+        ArrayList<Item> itens = comunicacao.SelecionarTodos();
         for (Item item : itens) {
-            if("sim".equals(item.getLeilaoAtivo())){
+            if ("sim".equals(item.getLeilaoAtivo())) {
                 itemSelecionado = item;
                 break;
             }
         }
-        if(itemSelecionado != null){
+        if (itemSelecionado != null) {
             jLabelNomeItem.setText(itemSelecionado.getNome());
             jLabelPrecoItem.setText(String.valueOf(itemSelecionado.getValor()));
             jLabelLanceMinItem.setText(String.valueOf(itemSelecionado.getLanceMin()));
-            if(itemSelecionado.getNomeUltimoLance() != null){
+            if (itemSelecionado.getNomeUltimoLance() != null) {
                 jLabelUltimoLanceItem.setText(itemSelecionado.getNomeUltimoLance());
                 jLabelValorUltimoLanceItem.setText(String.valueOf(itemSelecionado.getValorUltimoLance()));
                 jLabelTempoRestanteItem.setText(itemSelecionado.getTempo());
             }
+        }
+    }
+
+    private void SolicitarEntrada() {
+        String userName = JOptionPane.showInputDialog(null, "Insira seu Nome: ");
+
+        Usuario usuario = new Usuario(userName);
+
+        try {
+            DatagramSocket clientSock = new DatagramSocket();
+            InetAddress srvIP = InetAddress.getByName("127.0.0.1");
+            int srvPort = 50001;
+
+            byte[] sendData = new byte[65507];
+            byte[] rcvdData = new byte[65507];
+
+            JSONObject SendMsg = new JSONObject();
+            SendMsg.put("userName", usuario.getNome());
+
+            sendData = SendMsg.toString().getBytes("UTF-8");
+
+            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length,
+                    srvIP, srvPort);
+
+            clientSock.send(sendDatagramPacket);
+
+            DatagramPacket rcvDatagramPacket = new DatagramPacket(rcvdData, rcvdData.length);
+            clientSock.receive(rcvDatagramPacket);
+
+            String rcvMsg = new String(rcvDatagramPacket.getData());
+
+            JSONObject JsonRcvMsg = new JSONObject(rcvMsg);
+
+            MulticastSocket multicastSocket = new MulticastSocket(JsonRcvMsg.getInt("Port"));
+            InetAddress group = InetAddress.getByName(JsonRcvMsg.getString("Group"));
+
+            comunicacao = new Comunicacao(multicastSocket, group);
+            comunicacao.start();
+
+        } catch (Exception e) {
+
         }
     }
 }

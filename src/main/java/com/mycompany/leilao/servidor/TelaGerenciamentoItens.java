@@ -39,7 +39,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
         jButtonVoltar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButtonNovoItem = new javax.swing.JButton();
-        jButtonNovoItem1 = new javax.swing.JButton();
+        jButtonLeiloarItem = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Visualização e cadastro de itens");
@@ -146,10 +146,10 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
             }
         });
 
-        jButtonNovoItem1.setText("Iniciar leilão de item");
-        jButtonNovoItem1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonLeiloarItem.setText("Iniciar leilão de item");
+        jButtonLeiloarItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonNovoItem1ActionPerformed(evt);
+                jButtonLeiloarItemActionPerformed(evt);
             }
         });
 
@@ -167,7 +167,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonNovoItem1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonLeiloarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -178,12 +178,12 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(43, 43, 43)
-                        .addComponent(jButtonNovoItem1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jButtonLeiloarItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButtonNovoItem, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 483, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -193,6 +193,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
     private void jButtonNovoItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoItemActionPerformed
         jPanelLista.setVisible(false);
         jButtonNovoItem.setVisible(false);
+        jButtonLeiloarItem.setVisible(false);
         jPanelCriar.setVisible(true);
     }//GEN-LAST:event_jButtonNovoItemActionPerformed
 
@@ -220,16 +221,18 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
         
         jPanelLista.setVisible(true);
         jButtonNovoItem.setVisible(true);
+        jButtonLeiloarItem.setVisible(true);
         jPanelCriar.setVisible(false);
     }//GEN-LAST:event_jButtonSalvarActionPerformed
 
     private void jButtonVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonVoltarActionPerformed
         jPanelLista.setVisible(true);
         jButtonNovoItem.setVisible(true);
+        jButtonLeiloarItem.setVisible(true);
         jPanelCriar.setVisible(false);
     }//GEN-LAST:event_jButtonVoltarActionPerformed
 
-    private void jButtonNovoItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNovoItem1ActionPerformed
+    private void jButtonLeiloarItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeiloarItemActionPerformed
         ArrayList<Item> itens = controlador.SelecionarTodos();
         
         if (jListItens.size() == null) {
@@ -257,7 +260,7 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
             Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }//GEN-LAST:event_jButtonNovoItem1ActionPerformed
+    }//GEN-LAST:event_jButtonLeiloarItemActionPerformed
 
      private void AtualizarLista() {
         ArrayList<Item> itens = new ArrayList<>();
@@ -271,8 +274,8 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonLeiloarItem;
     private javax.swing.JButton jButtonNovoItem;
-    private javax.swing.JButton jButtonNovoItem1;
     private javax.swing.JButton jButtonSalvar;
     private javax.swing.JButton jButtonVoltar;
     private javax.swing.JLabel jLabel1;
