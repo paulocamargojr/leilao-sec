@@ -4,7 +4,9 @@ import static com.mycompany.leilao.servidor.CriptografiaSimetrica.createAESKey;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.security.KeyFactory;
 import java.security.PublicKey;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.HashMap;
 import javax.crypto.SecretKey;
 import org.json.JSONObject;
@@ -37,8 +39,15 @@ public class ControleEntrada extends Thread {
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
 
                 String userName = jsonRcvMsg.getString("userName");
-                //PublicKey chave = (PublicKey) jsonRcvMsg.get("Chave");
+                //String bytes = jsonRcvMsg.getString("Chave");
+                
+                String encodedString = (String)jsonRcvMsg.get("Chave");
+                byte[] byteArray = java.util.Base64.getDecoder().decode(encodedString);
 
+                PublicKey publicKey = 
+                    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(byteArray));
+                
+                
                 System.out.print("\nMessage received...");
                 System.out.print("\n\tSource IP address: " + srcIPAddr);
                 System.out.print("\n\tSource port: " + srcPort);
@@ -50,7 +59,7 @@ public class ControleEntrada extends Thread {
                 JSONObject sendMsg = new JSONObject();
                 sendMsg.put("Port", 50002);
                 sendMsg.put("Group", "230.0.0.0");
-                sendMsg.put("Chave", chaveSimetrica);
+                sendMsg.put("Chave", chaveSimetrica.getEncoded());
 
                 sendData = sendMsg.toString().getBytes();
 

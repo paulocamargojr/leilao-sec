@@ -9,6 +9,7 @@ import java.net.MulticastSocket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.SecretKey;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
@@ -269,7 +270,12 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
             JSONObject SendMsg = new JSONObject();
             SendMsg.put("userName", usuario.getNome());
-            SendMsg.put("Chave", usuario.chaves.getPublic());
+            //String dsfds = new String(usuario.getChavePublica().getEncoded());
+            byte[] bytes = usuario.getChavePublica().getEncoded();
+            String encodedString = java.util.Base64.getEncoder().encodeToString(bytes);
+            SendMsg.put("Chave",encodedString);
+            //SendMsg.put("Chave", usuario.getChavePublica().getEncoded().toString());
+//            SendMsg.put("Chave", dsfds);
 
             sendData = SendMsg.toString().getBytes("UTF-8");
 
