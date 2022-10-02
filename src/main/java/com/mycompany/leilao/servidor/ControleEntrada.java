@@ -35,18 +35,14 @@ public class ControleEntrada extends Thread {
                 rcvData = rcvdDatagramPacket.getData();
 
                 String rcvMsg = new String(rcvData, "UTF-8");
-
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
-
                 String userName = jsonRcvMsg.getString("userName");
-                //String bytes = jsonRcvMsg.getString("Chave");
-                
                 String encodedString = (String)jsonRcvMsg.get("Chave");
+                
                 byte[] byteArray = java.util.Base64.getDecoder().decode(encodedString);
 
                 PublicKey publicKey = 
                     KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(byteArray));
-                
                 
                 System.out.print("\nMessage received...");
                 System.out.print("\n\tSource IP address: " + srcIPAddr);
@@ -59,7 +55,9 @@ public class ControleEntrada extends Thread {
                 JSONObject sendMsg = new JSONObject();
                 sendMsg.put("Port", 50002);
                 sendMsg.put("Group", "230.0.0.0");
-                sendMsg.put("Chave", chaveSimetrica.getEncoded());
+                byte[] bytes = chaveSimetrica.getEncoded();
+                String encodedKey = java.util.Base64.getEncoder().encodeToString(bytes);
+                sendMsg.put("Chave", encodedKey);
 
                 sendData = sendMsg.toString().getBytes();
 
