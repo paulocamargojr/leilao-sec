@@ -1,6 +1,7 @@
 package com.mycompany.leilao.servidor;
 
-import static com.mycompany.leilao.servidor.CriptografiaSimetrica.createAESKey;
+import com.mycompany.leilao.compartilhado.CriptografiaAssimetrica;
+import static com.mycompany.leilao.compartilhado.CriptografiaSimetrica.createAESKey;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -12,7 +13,7 @@ import javax.crypto.SecretKey;
 import org.json.JSONObject;
 
 public class ControleEntrada extends Thread {
-    public HashMap<String, String> usuarios = new HashMap<String, String>();
+    public HashMap<String, PublicKey> usuarios = new HashMap<String, PublicKey>();
     public SecretKey chaveSimetrica;
 
     @Override
@@ -37,7 +38,7 @@ public class ControleEntrada extends Thread {
                 String rcvMsg = new String(rcvData, "UTF-8");
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
                 String userName = jsonRcvMsg.getString("userName");
-                String encodedString = (String)jsonRcvMsg.get("Chave");
+                String encodedString = jsonRcvMsg.getString("Chave");
                 
                 byte[] byteArray = java.util.Base64.getDecoder().decode(encodedString);
 
@@ -47,16 +48,22 @@ public class ControleEntrada extends Thread {
                 System.out.print("\nMessage received...");
                 System.out.print("\n\tSource IP address: " + srcIPAddr);
                 System.out.print("\n\tSource port: " + srcPort);
-                System.out.print("\n\tSource payload lenhth: " + rcvdDatagramPacket.getLength());
                 System.out.print("\n\tPayload: " + userName);
 
-                usuarios.put(userName, "dafgadsgfhjs23423");
-
+                usuarios.put(userName, publicKey);
+                
                 JSONObject sendMsg = new JSONObject();
-                sendMsg.put("Port", 50002);
-                sendMsg.put("Group", "230.0.0.0");
-                byte[] bytes = chaveSimetrica.getEncoded();
-                String encodedKey = java.util.Base64.getEncoder().encodeToString(bytes);
+                
+                byte[] port = CriptografiaAssimetrica.do_RSAEncryption("50002", publicKey);
+                String encodedPort = java.util.Base64.getEncoder().encodeToString(port);
+                sendMsg.put("Port", encodedPort);
+                
+                byte[] group = CriptografiaAssimetrica.do_RSAEncryption("230.0.0.0", publicKey);
+                String encodedGroup = java.util.Base64.getEncoder().encodeToString(group);
+                sendMsg.put("Group", encodedGroup);
+                
+                byte[] Symmetrickey = CriptografiaAssimetrica.do_RSAEncryption(chaveSimetrica.toString(), publicKey);
+                String encodedKey = java.util.Base64.getEncoder().encodeToString(Symmetrickey);
                 sendMsg.put("Chave", encodedKey);
 
                 sendData = sendMsg.toString().getBytes();
@@ -69,7 +76,11 @@ public class ControleEntrada extends Thread {
         }
     }
 
-    public HashMap SelecionarTodos() {
-        return usuarios;
+    public PublicKey SelecionarPorNome(String nome) {
+        return usuarios.get(nome);
+    }
+    
+    public SecretKey SelecionarChave(){
+        return chaveSimetrica;
     }
 }

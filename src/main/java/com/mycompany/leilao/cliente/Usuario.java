@@ -1,5 +1,6 @@
 package com.mycompany.leilao.cliente;
 
+import com.mycompany.leilao.compartilhado.CriptografiaAssimetrica;
 import java.security.KeyPair;
 import java.security.PrivateKey;
 import java.security.PublicKey;
