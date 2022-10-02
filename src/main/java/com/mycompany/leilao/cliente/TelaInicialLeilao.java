@@ -1,5 +1,6 @@
 package com.mycompany.leilao.cliente;
 
+import com.mycompany.leilao.compartilhado.CriptografiaAssimetrica;
 import com.mycompany.leilao.compartilhado.Item;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -23,6 +24,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     Comunicacao comunicacao;
     Item itemSelecionado;
     Usuario usuario;
+    SecretKey secretKey;
 
     public TelaInicialLeilao() throws Exception {
         initComponents();
@@ -291,15 +293,22 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
             String rcvMsg = new String(rcvDatagramPacket.getData());
 
             JSONObject JsonRcvMsg = new JSONObject(rcvMsg);
-
-            MulticastSocket multicastSocket = new MulticastSocket(JsonRcvMsg.getInt("Port"));
-            InetAddress group = InetAddress.getByName(JsonRcvMsg.getString("Group"));
+            
+            String port = JsonRcvMsg.getString("Port");
+            byte[] bytePort = java.util.Base64.getDecoder().decode(port);
+            String DecodedPort = CriptografiaAssimetrica.do_RSADecryption(bytePort, usuario.chaves.getPrivate());
+            MulticastSocket multicastSocket = new MulticastSocket(Integer.parseInt(DecodedPort));
+            
+            String Encodedgroup = JsonRcvMsg.getString("Group");
+            byte[] byteGroup = java.util.Base64.getDecoder().decode(Encodedgroup);
+            String DecodedGroup = CriptografiaAssimetrica.do_RSADecryption(byteGroup, usuario.chaves.getPrivate());
+            InetAddress group = InetAddress.getByName(DecodedGroup);
+            
             String encodedKey = (String)JsonRcvMsg.get("Chave"); 
-            byte[] byteArray = java.util.Base64.getDecoder().decode(encodedKey);
+            byte[] DecodedKey = java.util.Base64.getDecoder().decode(encodedKey);
+            secretKey = new SecretKeySpec(DecodedKey, "AES");
 
-            SecretKeySpec secretKeySpec = new SecretKeySpec(byteArray, "AES");
-
-            comunicacao = new Comunicacao(multicastSocket, group);
+            comunicacao = new Comunicacao(multicastSocket, group, secretKey);
             comunicacao.start();
 
         } catch (Exception e) {

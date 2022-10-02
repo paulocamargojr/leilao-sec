@@ -6,6 +6,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
@@ -15,10 +16,12 @@ public class Comunicacao extends Thread {
     
     MulticastSocket multicastSocket;
     InetAddress group;
+    SecretKey chave;
     
-    public Comunicacao(MulticastSocket multicastSocket, InetAddress group){
+    public Comunicacao(MulticastSocket multicastSocket, InetAddress group, SecretKey chave){
         this.multicastSocket = multicastSocket;
         this.group = group;
+        this.chave = chave;
     }
 
     @Override
@@ -27,12 +30,6 @@ public class Comunicacao extends Thread {
             
             multicastSocket.joinGroup(group);
             byte[] rcvData = new byte[65507];
-//            byte[] sendData = new byte[65507];
-//            JSONObject jsonObject = new JSONObject();
-//            jsonObject.put("Id", 1);
-//            sendData = jsonObject.toString().getBytes("UTF-8");
-//            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50000);
-//            multicastSocket.send(sendDatagramPacket);
 
             while (true) {
                 DatagramPacket rcvDatagramPacket = new DatagramPacket(rcvData, rcvData.length);

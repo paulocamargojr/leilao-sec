@@ -1,4 +1,4 @@
-package com.mycompany.leilao.cliente;
+package com.mycompany.leilao.compartilhado;
 
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
@@ -35,13 +35,13 @@ public class CriptografiaAssimetrica {
     // using private Key.
     public static byte[] do_RSAEncryption(
             String plainText,
-            PrivateKey privateKey)
+            PublicKey publicKey)
             throws Exception {
         Cipher cipher
                 = Cipher.getInstance(RSA);
 
         cipher.init(
-                Cipher.ENCRYPT_MODE, privateKey);
+                Cipher.ENCRYPT_MODE, publicKey);
 
         return cipher.doFinal(
                 plainText.getBytes());
@@ -52,13 +52,13 @@ public class CriptografiaAssimetrica {
     // original plaintext.
     public static String do_RSADecryption(
             byte[] cipherText,
-            PublicKey publicKey)
+            PrivateKey privateKey)
             throws Exception {
         Cipher cipher
                 = Cipher.getInstance(RSA);
 
         cipher.init(Cipher.DECRYPT_MODE,
-                publicKey);
+                privateKey);
         byte[] result
                 = cipher.doFinal(cipherText);
 
@@ -77,7 +77,7 @@ public class CriptografiaAssimetrica {
         byte[] cipherText
                 = do_RSAEncryption(
                         plainText,
-                        keypair.getPrivate());
+                        keypair.getPublic());
 
         System.out.println(
                 "The Public Key is: "
@@ -98,7 +98,7 @@ public class CriptografiaAssimetrica {
         String decryptedText
                 = do_RSADecryption(
                         cipherText,
-                        keypair.getPublic());
+                        keypair.getPrivate());
 
         System.out.println(
                 "The decrypted text is: "

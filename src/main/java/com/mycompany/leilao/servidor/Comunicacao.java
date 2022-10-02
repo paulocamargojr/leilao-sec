@@ -1,14 +1,14 @@
 package com.mycompany.leilao.servidor;
 
+import com.mycompany.leilao.compartilhado.CriptografiaSimetrica;
 import com.mycompany.leilao.compartilhado.ControladorItem;
 import com.mycompany.leilao.compartilhado.Item;
-import com.mycompany.leilao.cliente.Usuario;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
-import java.util.HashMap;
+import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
 
@@ -16,6 +16,7 @@ public class Comunicacao extends Thread{
     ControladorItem controladorItem;
     ArrayList<Item> itens = new ArrayList<>();
     ControleEntrada controleEntrada  = new ControleEntrada();
+    SecretKey chave = controleEntrada.SelecionarChave();
     InetAddress inetAddressIP;
     int inetAddressPort;
     MulticastSocket multicastSocket;
@@ -55,8 +56,8 @@ public class Comunicacao extends Thread{
         }
     }
     
-    public void Enviar(Item item) throws IOException {
-        multicastSocket = new MulticastSocket(50002);
+    public void Enviar(Item item) throws IOException, Exception {
+         multicastSocket = new MulticastSocket(50002);
         group = InetAddress.getByName("230.0.0.0");
         multicastSocket.joinGroup(group);
         byte[] sendData = new byte[65507];
