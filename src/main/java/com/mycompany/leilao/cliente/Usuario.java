@@ -1,15 +1,14 @@
 package com.mycompany.leilao.cliente;
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.KeyPair;
 
 public class Usuario {
     public String userName;
-    public PrivateKey privateKey;
-    public PublicKey publicKey;
+    public KeyPair chaves;
     
-    public Usuario(String userName){
+    public Usuario(String userName) throws Exception{
         this.userName = userName;
+        chaves = CriptografiaAssimetrica.generateRSAKkeyPair();
     }
     
     public String getNome(){
