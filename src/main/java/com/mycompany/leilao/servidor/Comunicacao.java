@@ -2,7 +2,7 @@ package com.mycompany.leilao.servidor;
 
 import com.mycompany.leilao.compartilhado.ControladorItem;
 import com.mycompany.leilao.compartilhado.Item;
-import com.mycompany.leilao.compartilhado.Usuario;
+import com.mycompany.leilao.cliente.Usuario;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
