@@ -19,7 +19,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     Item itemSelecionado;
     Usuario usuario;
 
-    public TelaInicialLeilao() {
+    public TelaInicialLeilao() throws Exception {
         initComponents();
         EntrarNoGrupo();
     }
@@ -254,7 +254,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
         }
     }
 
-    private void EntrarNoGrupo() {
+    private void EntrarNoGrupo() throws Exception {
         String userName = JOptionPane.showInputDialog(null, "Insira seu Nome: ");
 
         usuario = new Usuario(userName);
@@ -269,6 +269,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
             JSONObject SendMsg = new JSONObject();
             SendMsg.put("userName", usuario.getNome());
+            SendMsg.put("Chave", usuario.chaves.getPublic());
 
             sendData = SendMsg.toString().getBytes("UTF-8");
 

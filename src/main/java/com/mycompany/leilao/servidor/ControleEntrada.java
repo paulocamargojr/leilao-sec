@@ -1,13 +1,17 @@
 package com.mycompany.leilao.servidor;
 
+import static com.mycompany.leilao.servidor.CriptografiaSimetrica.createAESKey;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.security.PublicKey;
 import java.util.HashMap;
+import javax.crypto.SecretKey;
 import org.json.JSONObject;
 
 public class ControleEntrada extends Thread {
     public HashMap<String, String> usuarios = new HashMap<String, String>();
+    public SecretKey chaveSimetrica;
 
     @Override
     public void run() {
@@ -16,6 +20,8 @@ public class ControleEntrada extends Thread {
             DatagramSocket datagramSocket = new DatagramSocket(srvPort);
             byte[] rcvData = new byte[65507];
             byte[] sendData = new byte[65507];
+            
+            chaveSimetrica = createAESKey();
 
             while (true) {
                 DatagramPacket rcvdDatagramPacket = new DatagramPacket(rcvData, rcvData.length);
@@ -26,12 +32,12 @@ public class ControleEntrada extends Thread {
                 int srcPort = rcvdDatagramPacket.getPort();
                 rcvData = rcvdDatagramPacket.getData();
 
-                String rcvMsg = null;
-                rcvMsg = new String(rcvData, "UTF-8");
+                String rcvMsg = new String(rcvData, "UTF-8");
 
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
 
                 String userName = jsonRcvMsg.getString("userName");
+                //PublicKey chave = (PublicKey) jsonRcvMsg.get("Chave");
 
                 System.out.print("\nMessage received...");
                 System.out.print("\n\tSource IP address: " + srcIPAddr);
@@ -44,6 +50,7 @@ public class ControleEntrada extends Thread {
                 JSONObject sendMsg = new JSONObject();
                 sendMsg.put("Port", 50002);
                 sendMsg.put("Group", "230.0.0.0");
+                sendMsg.put("Chave", chaveSimetrica);
 
                 sendData = sendMsg.toString().getBytes();
 
