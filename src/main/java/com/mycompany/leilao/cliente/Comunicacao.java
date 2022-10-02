@@ -1,7 +1,6 @@
 package com.mycompany.leilao.cliente;
 
 import com.mycompany.leilao.compartilhado.Item;
-import com.mycompany.leilao.compartilhado.Usuario;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;

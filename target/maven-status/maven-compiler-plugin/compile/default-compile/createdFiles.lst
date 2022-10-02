@@ -1,6 +1,5 @@
 com\mycompany\leilao\cliente\Usuario.class
 com\mycompany\leilao\cliente\Comunicacao.class
-com\mycompany\leilao\compartilhado\Criptografia.class
 com\mycompany\leilao\servidor\Servidor.class
 com\mycompany\leilao\cliente\TelaInicialLeilao.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens$4.class
