@@ -25,7 +25,7 @@ public class CriptografiaAssimetrica {
                 = KeyPairGenerator.getInstance(RSA);
 
         keyPairGenerator.initialize(
-                2048, secureRandom);
+                1024, secureRandom);
         return keyPairGenerator
                 .generateKeyPair();
     }
