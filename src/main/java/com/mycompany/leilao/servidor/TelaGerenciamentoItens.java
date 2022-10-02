@@ -213,6 +213,8 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
             c.Enviar(item);
         } catch (IOException ex) {
             Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         jTextFieldNome.setText("");

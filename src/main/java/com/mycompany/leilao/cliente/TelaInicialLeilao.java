@@ -304,11 +304,18 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
             String DecodedGroup = CriptografiaAssimetrica.do_RSADecryption(byteGroup, usuario.chaves.getPrivate());
             InetAddress group = InetAddress.getByName(DecodedGroup);
             
-            String encodedKey = (String)JsonRcvMsg.get("Chave"); 
-            byte[] DecodedKey = java.util.Base64.getDecoder().decode(encodedKey);
-            secretKey = new SecretKeySpec(DecodedKey, "AES");
+            String encodedIV = JsonRcvMsg.getString("IV");
+//            byte[] byteIV = java.util.Base64.getDecoder().decode(encodedIV);
+//            String DecodedStringIV = CriptografiaAssimetrica.do_RSADecryption(byteIV, usuario.chaves.getPrivate());
+            byte[] decodedIV = java.util.Base64.getDecoder().decode(encodedIV);
+            
+            String encodedKey = JsonRcvMsg.getString("Chave"); 
+            byte[] byteEncodedKey = java.util.Base64.getDecoder().decode(encodedKey);
+            String decodedKey = CriptografiaAssimetrica.do_RSADecryption(byteEncodedKey, usuario.chaves.getPrivate());
+            byte [] byteDecodedKey = java.util.Base64.getDecoder().decode(decodedKey);
+            secretKey = new SecretKeySpec(byteDecodedKey, 0, byteDecodedKey.length, "AES");
 
-            comunicacao = new Comunicacao(multicastSocket, group, secretKey);
+            comunicacao = new Comunicacao(multicastSocket, group, secretKey, decodedIV);
             comunicacao.start();
 
         } catch (Exception e) {

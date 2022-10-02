@@ -7,7 +7,6 @@ import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.util.Scanner;
 import javax.crypto.Cipher;
-import javax.xml.bind.DatatypeConverter;
 
 public class CriptografiaAssimetrica {
 
@@ -15,8 +14,6 @@ public class CriptografiaAssimetrica {
             = "RSA";
     private static Scanner sc;
 
-    // Generating public & private keys
-    // using RSA algorithm.
     public static KeyPair generateRSAKkeyPair()
             throws Exception {
         SecureRandom secureRandom
@@ -25,14 +22,11 @@ public class CriptografiaAssimetrica {
                 = KeyPairGenerator.getInstance(RSA);
 
         keyPairGenerator.initialize(
-                1024, secureRandom);
+                2048, secureRandom);
         return keyPairGenerator
                 .generateKeyPair();
     }
 
-    // Encryption function which converts
-    // the plainText into a cipherText
-    // using private Key.
     public static byte[] do_RSAEncryption(
             String plainText,
             PublicKey publicKey)
@@ -47,9 +41,6 @@ public class CriptografiaAssimetrica {
                 plainText.getBytes());
     }
 
-    // Decryption function which converts
-    // the ciphertext back to the
-    // original plaintext.
     public static String do_RSADecryption(
             byte[] cipherText,
             PrivateKey privateKey)
@@ -63,45 +54,5 @@ public class CriptografiaAssimetrica {
                 = cipher.doFinal(cipherText);
 
         return new String(result);
-    }
-
-    // Driver code
-    public static void main(String args[])
-            throws Exception {
-        KeyPair keypair
-                = generateRSAKkeyPair();
-
-        String plainText = "This is the PlainText "
-                + "I want to Encrypt using RSA.";
-
-        byte[] cipherText
-                = do_RSAEncryption(
-                        plainText,
-                        keypair.getPublic());
-
-        System.out.println(
-                "The Public Key is: "
-                + DatatypeConverter.printHexBinary(
-                        keypair.getPublic().getEncoded()));
-
-        System.out.println(
-                "The Private Key is: "
-                + DatatypeConverter.printHexBinary(
-                        keypair.getPrivate().getEncoded()));
-
-        System.out.print("The Encrypted Text is: ");
-
-        System.out.println(
-                DatatypeConverter.printHexBinary(
-                        cipherText));
-
-        String decryptedText
-                = do_RSADecryption(
-                        cipherText,
-                        keypair.getPrivate());
-
-        System.out.println(
-                "The decrypted text is: "
-                + decryptedText);
     }
 }
