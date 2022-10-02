@@ -16,7 +16,8 @@ public class Comunicacao extends Thread{
     ControladorItem controladorItem;
     ArrayList<Item> itens = new ArrayList<>();
     ControleEntrada controleEntrada  = new ControleEntrada();
-    SecretKey chave = controleEntrada.SelecionarChave();
+    SecretKey chave;
+    byte[] IV;
     InetAddress inetAddressIP;
     int inetAddressPort;
     MulticastSocket multicastSocket;
@@ -57,16 +58,29 @@ public class Comunicacao extends Thread{
     }
     
     public void Enviar(Item item) throws IOException, Exception {
-         multicastSocket = new MulticastSocket(50002);
+        multicastSocket = new MulticastSocket(50002);
         group = InetAddress.getByName("230.0.0.0");
         multicastSocket.joinGroup(group);
         byte[] sendData = new byte[65507];
         JSONObject sendItem = new JSONObject();
-
-        sendItem.put("Nome", item.getNome());
-        sendItem.put("Valor", item.getValor());
-        sendItem.put("LanceMin", item.getLanceMin());
-        sendItem.put("Leilao", item.getLeilaoAtivo());
+        chave = controleEntrada.SelecionarChave();
+        IV = controleEntrada.SelecionarIV();
+        
+        byte[] nome = CriptografiaSimetrica.do_AESEncryption(item.getNome(), chave, IV);
+        String encodedNome = java.util.Base64.getEncoder().encodeToString(nome);
+        sendItem.put("Nome", encodedNome);
+        
+        byte[] valor = CriptografiaSimetrica.do_AESEncryption(String.valueOf(item.getValor()), chave, IV);
+        String encodedValor = java.util.Base64.getEncoder().encodeToString(valor);
+        sendItem.put("Valor", encodedValor);
+        
+        byte[] lanceMin = CriptografiaSimetrica.do_AESEncryption(String.valueOf(item.getLanceMin()), chave, IV);
+        String encodedLanceMin = java.util.Base64.getEncoder().encodeToString(lanceMin);
+        sendItem.put("LanceMin", encodedLanceMin);
+        
+        byte[] leilao = CriptografiaSimetrica.do_AESEncryption(item.getLeilaoAtivo(), chave, IV);
+        String encodedLeilao = java.util.Base64.getEncoder().encodeToString(leilao);
+        sendItem.put("Leilao", encodedLeilao);
 
         sendData = sendItem.toString().getBytes();
         DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);

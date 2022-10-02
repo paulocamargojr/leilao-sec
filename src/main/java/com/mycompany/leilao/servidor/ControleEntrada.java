@@ -2,6 +2,7 @@ package com.mycompany.leilao.servidor;
 
 import com.mycompany.leilao.compartilhado.CriptografiaAssimetrica;
 import static com.mycompany.leilao.compartilhado.CriptografiaSimetrica.createAESKey;
+import static com.mycompany.leilao.compartilhado.CriptografiaSimetrica.createInitializationVector;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 public class ControleEntrada extends Thread {
     public HashMap<String, PublicKey> usuarios = new HashMap<String, PublicKey>();
     public SecretKey chaveSimetrica;
+    public byte [] IV;
 
     @Override
     public void run() {
@@ -24,6 +26,7 @@ public class ControleEntrada extends Thread {
             byte[] rcvData = new byte[65507];
             byte[] sendData = new byte[65507];
             
+            IV = createInitializationVector();
             chaveSimetrica = createAESKey();
 
             while (true) {
@@ -62,7 +65,14 @@ public class ControleEntrada extends Thread {
                 String encodedGroup = java.util.Base64.getEncoder().encodeToString(group);
                 sendMsg.put("Group", encodedGroup);
                 
-                byte[] Symmetrickey = CriptografiaAssimetrica.do_RSAEncryption(chaveSimetrica.toString(), publicKey);
+                //byte[] _IV = CriptografiaAssimetrica.do_RSAEncryption(IV.toString(), publicKey);
+                String encodedIV = java.util.Base64.getEncoder().encodeToString(IV);
+                sendMsg.put("IV", encodedIV);
+                
+                byte [] byteChave = chaveSimetrica.getEncoded();
+                String stringChave = java.util.Base64.getEncoder().encodeToString(byteChave);
+                
+                byte[] Symmetrickey = CriptografiaAssimetrica.do_RSAEncryption(stringChave, publicKey);
                 String encodedKey = java.util.Base64.getEncoder().encodeToString(Symmetrickey);
                 sendMsg.put("Chave", encodedKey);
 
@@ -82,5 +92,9 @@ public class ControleEntrada extends Thread {
     
     public SecretKey SelecionarChave(){
         return chaveSimetrica;
+    }
+    
+    public byte[] SelecionarIV(){
+        return IV;
     }
 }

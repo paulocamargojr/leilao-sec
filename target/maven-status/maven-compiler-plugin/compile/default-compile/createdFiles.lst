@@ -2,13 +2,16 @@ com\mycompany\leilao\cliente\Usuario.class
 com\mycompany\leilao\cliente\Comunicacao.class
 com\mycompany\leilao\servidor\Servidor.class
 com\mycompany\leilao\cliente\TelaInicialLeilao.class
+com\mycompany\leilao\compartilhado\CriptografiaSimetrica.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens$4.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens.class
 com\mycompany\leilao\cliente\TelaInicialLeilao$1.class
 com\mycompany\leilao\cliente\Cliente.class
+com\mycompany\leilao\compartilhado\CriptografiaAssimetrica.class
 com\mycompany\leilao\compartilhado\Item.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens$1.class
 com\mycompany\leilao\compartilhado\ControladorItem.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens$3.class
+com\mycompany\leilao\servidor\ControleEntrada.class
 com\mycompany\leilao\servidor\Comunicacao.class
 com\mycompany\leilao\servidor\TelaGerenciamentoItens$2.class
