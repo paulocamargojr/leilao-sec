@@ -44,11 +44,19 @@ public class Comunicacao extends Thread {
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
 
                 if (jsonRcvMsg.has("AtualizacaoItem")) {
-                    String nome = jsonRcvMsg.getString("Nome");
-                    String ultimoLance = jsonRcvMsg.getString("UltimoLance");
-                    double valorUltimoLance = jsonRcvMsg.getDouble("ValorUltimoLance");
+                    byte[] byteNome = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("Nome"));
+                    String nome = CriptografiaSimetrica.do_AESDecryption(byteNome, chave, IV);
+                    
+                    byte[] byteNomeUltimoLance = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("UltimoLance"));
+                    String ultimoLance = CriptografiaSimetrica.do_AESDecryption(byteNomeUltimoLance, chave, IV);
+                    
+                    byte[] byteValorUltimoLance = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("ValorUltimoLance"));
+                    double valorUltimoLance = Double.parseDouble(CriptografiaSimetrica.do_AESDecryption(byteValorUltimoLance, chave, IV));
+                    
                     String tempoRestante = jsonRcvMsg.getString("Tempo");
-                    String estaAtivo = jsonRcvMsg.getString("Leilao");
+                    
+                    byte[] byteEstaAtivo = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("Leilao"));
+                    String estaAtivo = CriptografiaSimetrica.do_AESDecryption(byteEstaAtivo, chave, IV);
 
                     for (Item item : itens) {
                         if (item.getNome() == null ? nome == null : item.getNome().equals(nome)) {
@@ -90,13 +98,21 @@ public class Comunicacao extends Thread {
         return itens;
     }
     
-    public void EnviarLance(Usuario usuario, double valor) throws IOException{
+    public void EnviarLance(Usuario usuario, double valor) throws IOException, Exception{
         byte[] sendData = new byte[65507];
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("Usuario", usuario.getNome());
-        jsonObject.put("ValorLance", valor);
+        
+        byte[] byteNome = CriptografiaSimetrica.do_AESEncryption(usuario.getNome(), chave, IV);
+        String encodedNome = java.util.Base64.getEncoder().encodeToString(byteNome);
+        jsonObject.put("Usuario", encodedNome);
+        
+        byte[] byteValor = CriptografiaSimetrica.do_AESEncryption(String.valueOf(valor), chave, IV);
+        String encodedValor = java.util.Base64.getEncoder().encodeToString(byteValor);
+        jsonObject.put("ValorLance", encodedValor);
+        
         sendData = jsonObject.toString().getBytes("UTF-8");
         DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);
+        
         multicastSocket.send(sendDatagramPacket);
     }
 }
