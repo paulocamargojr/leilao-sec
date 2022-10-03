@@ -53,7 +53,7 @@ public class Comunicacao extends Thread {
                     byte[] byteValorUltimoLance = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("ValorUltimoLance"));
                     double valorUltimoLance = Double.parseDouble(CriptografiaSimetrica.do_AESDecryption(byteValorUltimoLance, chave, IV));
                     
-                    String tempoRestante = jsonRcvMsg.getString("Tempo");
+                    int tempoRestante = jsonRcvMsg.getInt("Tempo");
                     
                     byte[] byteEstaAtivo = java.util.Base64.getDecoder().decode(jsonRcvMsg.getString("Leilao"));
                     String estaAtivo = CriptografiaSimetrica.do_AESDecryption(byteEstaAtivo, chave, IV);

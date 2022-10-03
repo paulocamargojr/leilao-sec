@@ -199,9 +199,23 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
 
     private void jButtonSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSalvarActionPerformed
         String nome = jTextFieldNome.getText();
-        double preco = Double.parseDouble(jTextFieldValor.getText());
-        double valorMin = Double.parseDouble(jTextFieldLanceMin.getText());
+        double preco = 0;
+        double valorMin = 0;
         
+        try {
+            preco = Double.parseDouble(jTextFieldValor.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Somente números no campo Preço", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        try {
+            valorMin = Double.parseDouble(jTextFieldLanceMin.getText());
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Somente números no campo lance mínimo", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+     
         Item item = new Item(nome, preco, valorMin);
         item.setLeilaoAtivo("");
         
@@ -305,6 +319,8 @@ public class TelaGerenciamentoItens extends javax.swing.JFrame implements Runnab
             } catch (IOException ex) {
                 Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
             } catch (InterruptedException ex) {
+                Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(TelaGerenciamentoItens.class.getName()).log(Level.SEVERE, null, ex);
             }
         }

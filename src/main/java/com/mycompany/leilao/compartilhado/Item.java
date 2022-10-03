@@ -8,10 +8,10 @@ public class Item {
     private String nome;
     private double valor;
     private double lanceMin;
-    private String tempo;
     private String nomeUltimoLance;
     private double valorUltimoLance;
     private String leilaoAtivo;
+    private int tempo;
     
     public Item(String nome, double valor, double lanceMin) {
         id = gerarId();
@@ -72,20 +72,20 @@ public class Item {
         this.valorUltimoLance = valorUltimoLance;
     }
 
-    public String getTempo() {
-        return tempo;
-    }
-
-    public void setTempo(String tempo) {
-        this.tempo = tempo;
-    }
-
     public void setLeilaoAtivo(String leilaoAtivo) {
         this.leilaoAtivo = leilaoAtivo;
     }
     
     public String getLeilaoAtivo(){
         return this.leilaoAtivo;
+    }
+
+    public int getTempo() {
+        return tempo;
+    }
+
+    public void setTempo(int tempo) {
+        this.tempo = tempo;
     }
     
     @Override
