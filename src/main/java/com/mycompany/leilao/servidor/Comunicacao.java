@@ -8,6 +8,8 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
 import org.json.JSONObject;
@@ -47,13 +49,21 @@ public class Comunicacao extends Thread{
                 JSONObject jsonRcvMsg = new JSONObject(rcvMsg);
                 
                 if(jsonRcvMsg.has("Usuario")){
-                    nomeUltimoLance = jsonRcvMsg.getString("Usuario");
-                    valorUltimoLance = jsonRcvMsg.getDouble("ValorLance");
+                    
+                    String encodedNome = jsonRcvMsg.getString("Usuario");
+                    byte[] byteEncodedNome = java.util.Base64.getDecoder().decode(encodedNome);
+                    nomeUltimoLance = CriptografiaSimetrica.do_AESDecryption(byteEncodedNome, chave, IV);
+                    
+                    String encodedValor = jsonRcvMsg.getString("ValorLance");
+                    byte[] byteEncodedValor = java.util.Base64.getDecoder().decode(encodedValor);
+                    valorUltimoLance = Double.parseDouble(CriptografiaSimetrica.do_AESDecryption(byteEncodedValor, chave, IV));
                 }
             }
         } catch (IOException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "Erro!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
+        } catch (Exception ex) {
+            Logger.getLogger(Comunicacao.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -87,7 +97,7 @@ public class Comunicacao extends Thread{
         multicastSocket.send(sendDatagramPacket);
     }
     
-    public void EnviarAtualizacoes(Item item) throws IOException {
+    public void EnviarAtualizacoes(Item item) throws IOException, Exception {
         if (item != null) {
             multicastSocket = new MulticastSocket(50002);
             group = InetAddress.getByName("230.0.0.0");
@@ -96,13 +106,32 @@ public class Comunicacao extends Thread{
             JSONObject sendItem = new JSONObject();
             
             sendItem.put("AtualizacaoItem", true);
-            sendItem.put("Nome", item.getNome());
-            sendItem.put("Valor", item.getValor());
-            sendItem.put("LanceMin", item.getLanceMin());
-            sendItem.put("UltimoLance", nomeUltimoLance);
-            sendItem.put("ValorUltimoLance", valorUltimoLance);
+            
+            byte[] nome = CriptografiaSimetrica.do_AESEncryption(item.getNome(), chave, IV);
+            String encodedNome = java.util.Base64.getEncoder().encodeToString(nome);
+            sendItem.put("Nome", encodedNome);
+        
+            byte[] valor = CriptografiaSimetrica.do_AESEncryption(String.valueOf(item.getValor()), chave, IV);
+            String encodedValor = java.util.Base64.getEncoder().encodeToString(valor);
+            sendItem.put("Valor", encodedValor);
+        
+            byte[] lanceMin = CriptografiaSimetrica.do_AESEncryption(String.valueOf(item.getLanceMin()), chave, IV);
+            String encodedLanceMin = java.util.Base64.getEncoder().encodeToString(lanceMin);
+            sendItem.put("LanceMin", encodedLanceMin);
+        
+            byte[] leilao = CriptografiaSimetrica.do_AESEncryption(item.getLeilaoAtivo(), chave, IV);
+            String encodedLeilao = java.util.Base64.getEncoder().encodeToString(leilao);
+            sendItem.put("Leilao", encodedLeilao);
+            
+            byte[] byteNomeUltimoLance = CriptografiaSimetrica.do_AESEncryption(nomeUltimoLance, chave, IV);
+            String encodedNomeUltimoLance = java.util.Base64.getEncoder().encodeToString(byteNomeUltimoLance);
+            sendItem.put("UltimoLance", encodedNomeUltimoLance);
+            
+            byte[] byteValorUltimoLance = CriptografiaSimetrica.do_AESEncryption(String.valueOf(valorUltimoLance), chave, IV);
+            String encodedValorUltimoLance = java.util.Base64.getEncoder().encodeToString(byteValorUltimoLance);
+            sendItem.put("ValorUltimoLance", encodedValorUltimoLance);
+            
             sendItem.put("Tempo", "00:23:21s");
-            sendItem.put("Leilao", item.getLeilaoAtivo());
 
             sendData = sendItem.toString().getBytes();
             DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);
