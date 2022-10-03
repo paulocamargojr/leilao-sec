@@ -45,8 +45,7 @@ public class ControleEntrada extends Thread {
                 
                 byte[] byteArray = java.util.Base64.getDecoder().decode(encodedString);
 
-                PublicKey publicKey = 
-                    KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(byteArray));
+                PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(byteArray));
                 
                 System.out.print("\nMessage received...");
                 System.out.print("\n\tSource IP address: " + srcIPAddr);
@@ -71,7 +70,6 @@ public class ControleEntrada extends Thread {
                 
                 byte [] byteChave = chaveSimetrica.getEncoded();
                 String stringChave = java.util.Base64.getEncoder().encodeToString(byteChave);
-                
                 byte[] Symmetrickey = CriptografiaAssimetrica.do_RSAEncryption(stringChave, publicKey);
                 String encodedKey = java.util.Base64.getEncoder().encodeToString(Symmetrickey);
                 sendMsg.put("Chave", encodedKey);

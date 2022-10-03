@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.crypto.SecretKey;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import org.json.JSONObject;
 
 public class Comunicacao extends Thread{
@@ -26,6 +27,7 @@ public class Comunicacao extends Thread{
     InetAddress group;
     String nomeUltimoLance = "";
     double valorUltimoLance = 0;
+    int tempo = 60;
     
     public Comunicacao(ControladorItem controladorItem) {
         this.controladorItem = controladorItem;
@@ -119,9 +121,16 @@ public class Comunicacao extends Thread{
             String encodedLanceMin = java.util.Base64.getEncoder().encodeToString(lanceMin);
             sendItem.put("LanceMin", encodedLanceMin);
         
-            byte[] leilao = CriptografiaSimetrica.do_AESEncryption(item.getLeilaoAtivo(), chave, IV);
-            String encodedLeilao = java.util.Base64.getEncoder().encodeToString(leilao);
-            sendItem.put("Leilao", encodedLeilao);
+            if(tempo > 0){
+                byte[] leilao = CriptografiaSimetrica.do_AESEncryption(item.getLeilaoAtivo(), chave, IV);
+                String encodedLeilao = java.util.Base64.getEncoder().encodeToString(leilao);
+                sendItem.put("Leilao", encodedLeilao);
+            } else{
+                item.setLeilaoAtivo("");
+                byte[] leilao = CriptografiaSimetrica.do_AESEncryption(item.getLeilaoAtivo(), chave, IV);
+                String encodedLeilao = java.util.Base64.getEncoder().encodeToString(leilao);
+                sendItem.put("Leilao", encodedLeilao);
+            }
             
             byte[] byteNomeUltimoLance = CriptografiaSimetrica.do_AESEncryption(nomeUltimoLance, chave, IV);
             String encodedNomeUltimoLance = java.util.Base64.getEncoder().encodeToString(byteNomeUltimoLance);
@@ -131,7 +140,8 @@ public class Comunicacao extends Thread{
             String encodedValorUltimoLance = java.util.Base64.getEncoder().encodeToString(byteValorUltimoLance);
             sendItem.put("ValorUltimoLance", encodedValorUltimoLance);
             
-            sendItem.put("Tempo", "00:23:21s");
+            sendItem.put("Tempo", tempo);
+            tempo--;
 
             sendData = sendItem.toString().getBytes();
             DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length, group, 50002);

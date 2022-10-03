@@ -86,7 +86,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
         jLabelUltimoLanceItem.setText("[Nome do cliente que fez o último lance]");
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel10.setText("Valor do último lance:");
+        jLabel10.setText("Valor do último lance (Valor atual):");
 
         jLabelValorUltimoLanceItem.setFont(new java.awt.Font("Segoe UI", 2, 14)); // NOI18N
         jLabelValorUltimoLanceItem.setText("[Valor do último lance]");
@@ -185,8 +185,35 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        double valorLance = Double.parseDouble(JOptionPane.showInputDialog(null, "Informe o valor do lance:", "Dar lance", JOptionPane.QUESTION_MESSAGE));
+        double valorLance = 0;
         
+        try {
+            valorLance = Double.parseDouble(JOptionPane.showInputDialog(null, "Informe o valor do lance:", "Dar lance", JOptionPane.QUESTION_MESSAGE));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Somente números no campo lance!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(valorLance <= itemSelecionado.getLanceMin()){
+            JOptionPane.showMessageDialog(null, "O lance precisa ser maior do que o lance mínimo!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(valorLance <= itemSelecionado.getValor()){
+            JOptionPane.showMessageDialog(null, "O lance precisa ser maior do que o  valor inicial!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(valorLance < itemSelecionado.getValorUltimoLance()+ itemSelecionado.getLanceMin()){
+            JOptionPane.showMessageDialog(null, "O lance precisa ser maior do que o  valor atual!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }     
+        
+        if(valorLance < itemSelecionado.getLanceMin() + itemSelecionado.getValor()){
+            JOptionPane.showMessageDialog(null, "O lance precisa ser maior do que o  valor atual com o lance mínimo!", "Erro!", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+ 
         try {
             comunicacao.EnviarLance(usuario, valorLance);
         } catch (IOException ex) {
@@ -258,7 +285,10 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
             if (itemSelecionado.getNomeUltimoLance() != null) {
                 jLabelUltimoLanceItem.setText(itemSelecionado.getNomeUltimoLance());
                 jLabelValorUltimoLanceItem.setText(String.valueOf(itemSelecionado.getValorUltimoLance()));
-                jLabelTempoRestanteItem.setText(itemSelecionado.getTempo());
+                if(itemSelecionado.getTempo() > 0)
+                    jLabelTempoRestanteItem.setText(String.valueOf(itemSelecionado.getTempo()));
+                else
+                    jLabelTempoRestanteItem.setText("0");
             }
         }
     }
@@ -284,9 +314,7 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
 
             sendData = SendMsg.toString().getBytes("UTF-8");
 
-            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length,
-                    srvIP, srvPort);
-
+            DatagramPacket sendDatagramPacket = new DatagramPacket(sendData, sendData.length,srvIP, srvPort);
             clientSock.send(sendDatagramPacket);
 
             DatagramPacket rcvDatagramPacket = new DatagramPacket(rcvdData, rcvdData.length);
@@ -307,8 +335,6 @@ public class TelaInicialLeilao extends javax.swing.JFrame implements Runnable {
             InetAddress group = InetAddress.getByName(DecodedGroup);
             
             String encodedIV = JsonRcvMsg.getString("IV");
-//            byte[] byteIV = java.util.Base64.getDecoder().decode(encodedIV);
-//            String DecodedStringIV = CriptografiaAssimetrica.do_RSADecryption(byteIV, usuario.chaves.getPrivate());
             byte[] decodedIV = java.util.Base64.getDecoder().decode(encodedIV);
             
             String encodedKey = JsonRcvMsg.getString("Chave"); 
